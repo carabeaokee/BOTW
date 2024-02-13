@@ -1,0 +1,8 @@
+@font-face {
+  font-family: Hylian;
+  src: url(.../assets/icons/Hylian.ttf);
+}
+
+.card-title {
+  font-family: Hylian;
+}
