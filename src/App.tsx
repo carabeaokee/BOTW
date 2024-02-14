@@ -9,12 +9,20 @@ import Treasure from "./pages/Treasure";
 import Register from "./registration/register";
 import Login from "./registration/login";
 import ErrorComponent from "./pages/ErrorComponent";
+import Account from "./pages/accountpage";
+import { AuthContext, AuthProvider } from "./components/AuthContext";
 import "./App.css";
+import DetailsPage from "./pages/detailspage";
+import ProtectedRoute from "./components/ProtectedRoute";
 
 const router = createBrowserRouter([
   {
     path: "/",
     element: <Home />,
+  },
+  {
+    path: "/:category/:id",
+    element: <DetailsPage />,
   },
   {
     path: "/creatures",
@@ -45,6 +53,14 @@ const router = createBrowserRouter([
     element: <Register />,
   },
   {
+    path: "/account",
+    element: (
+      <ProtectedRoute>
+        <Account />
+      </ProtectedRoute>
+    ),
+  },
+  {
     path: "*",
     element: <ErrorComponent />,
   },
@@ -53,7 +69,9 @@ const router = createBrowserRouter([
 function App() {
   return (
     <>
-      <RouterProvider router={router} />
+      <AuthProvider>
+        <RouterProvider router={router} />
+      </AuthProvider>
     </>
   );
 }

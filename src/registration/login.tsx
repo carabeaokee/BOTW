@@ -1,5 +1,8 @@
 import { LockOutlined } from "@mui/icons-material";
 import React from "react";
+import { AuthContext } from "../components/AuthContext";
+import { useNavigate } from "react-router-dom";
+import { useContext } from "react";
 import "../components/css/login.css";
 import {
   Container,
@@ -16,10 +19,16 @@ import { Link } from "react-router-dom";
 import Navbar from "../components/Navbar";
 
 const Login = () => {
+  const { loginUser } = useContext(AuthContext) || {};
+  // const navigate = useNavigate();
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
 
-  const handleLogin = () => {};
+  // const handleLogin = (e: React.MouseEvent<HTMLButtonElement>) => {
+  //   e.preventDefault();
+  //   loginUser?.();
+  //   navigate("/account");
+  // };
 
   return (
     <>
@@ -60,20 +69,18 @@ const Login = () => {
               label="Password"
               type="password"
               value={password}
-              onChange={(e) => {
-                setPassword(e.target.value);
-              }}
+              onChange={(e) => setPassword(e.target.value)} // Add this line to fix the code
             />
 
             <Button
               fullWidth
               variant="contained"
               sx={{ mt: 3, mb: 2 }}
-              onClick={handleLogin}
+              onClick={loginUser}
             >
               Login
             </Button>
-            <Grid container justifyContent={"flex-end"}>
+            <Grid container justifyContent="flex-end">
               <Grid item>
                 <Link to="/register">Don't have an account? Register</Link>
               </Grid>

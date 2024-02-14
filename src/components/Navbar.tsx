@@ -1,28 +1,40 @@
-import React, { useState } from "react";
+import React, { useContext, useState } from "react";
 import "./NavEl.js";
+import { AuthContext } from "./AuthContext";
 import { Nav, NavLink, NavMenu, NavBtn, NavBtnLink } from "./NavEl.js";
 import { TriforceIcon } from "../assets/icons/TriforceIcon.js";
 
 const Navbar = () => {
+  const { user, logoutUser, loginUser } = useContext(AuthContext);
+
+  console.log("logoutUser", logoutUser, loginUser);
+  // const { isLoggedin, setIsLoggedin } = useState(true);
+
+  const handleClick = () => {
+    if (user) {
+      logoutUser();
+    } else {
+      loginUser();
+    }
+  };
+
+  const navPath = user ? "/" : "/login";
+  const navLabel = user ? "Log Out" : "Log In";
+
   return (
     <Nav>
       <TriforceIcon />
       <NavMenu>
-        <NavLink to="/" className="Home">
-          Home
-        </NavLink>
+        <NavLink to="/">Home</NavLink>
         <NavLink to="/creatures">Creatures</NavLink>
         <NavLink to="/monsters">Monsters</NavLink>
-
         <NavLink to="/equipment">Equipment</NavLink>
-
         <NavLink to="/materials">Materials</NavLink>
-
         <NavLink to="/treasure">Treasure</NavLink>
+        <NavLink to="/account">Account</NavLink>
       </NavMenu>
-      <NavBtn>
-        <NavBtnLink to="/register">Sign Up</NavBtnLink>
-        <NavBtnLink to="/login">Log In</NavBtnLink>
+      <NavBtn onClick={handleClick}>
+        <NavBtnLink to={navPath}>{navLabel}</NavBtnLink>
       </NavBtn>
     </Nav>
   );

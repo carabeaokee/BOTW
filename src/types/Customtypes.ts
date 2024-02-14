@@ -2,6 +2,8 @@
 //   result: Compendium[];
 // }
 
+import { ReactNode } from "react";
+
 export declare type CompendiumItem = {
   id: number;
   name: string;
@@ -14,13 +16,18 @@ export interface ItemEquipment {
   common_locations: string[];
 }
 
-// export type ExtendedItem = BaseFetchItem & ItemEquipment
+export type FullEquipment = EquipmentItem & EquipmentProps;
+
+export type DetailType = FullEquipment &
+  CreatureType &
+  MaterialType &
+  MonsterType &
+  TreasureType;
 
 export declare type EquipmentItem = {
   category: string;
   common_locations: string[];
   description: string;
-  dlc: boolean;
   id: number;
   image: string;
   name: string;
@@ -75,9 +82,18 @@ export declare type TreasureType = {
   name: string;
 };
 
-export interface ILogin {
-  email: string;
-  password: string;
+export declare type ProtectedRouteProps = {
+  children: React.ReactNode;
+};
+
+export declare interface AuthContextType {
+  user: boolean;
+  loginUser: () => void;
+  logoutUser: () => void;
+}
+
+export declare interface AuthProviderProps {
+  children: ReactNode;
 }
 
 // export type CompendiumItem = EquipmentItem | CreatureType | MaterialType | MonsterType | TreasureType

@@ -25,11 +25,11 @@ export default function MyCard({ item }) {
           alt={item.name}
         />
         <CardContent>
-          <Typography variant="body2" color="text.secondary">
+          {/* <Typography variant="body2" color="text.secondary">
             {item.description}
-          </Typography>
+          </Typography> */}
         </CardContent>
-        <NavLink to={`/Creatures/${item.id}`}>More Info</NavLink>
+        <NavLink to={`/${item.category}/${item.id}`}>More Info</NavLink>
       </Card>
     </div>
   );

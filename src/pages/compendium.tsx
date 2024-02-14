@@ -1,4 +1,4 @@
-import { Grid, Container, Paper } from "@mui/material";
+import { Grid, Container } from "@mui/material";
 import React from "react";
 import { useEffect, useState } from "react";
 import { CompendiumItem } from "../types/Customtypes";
