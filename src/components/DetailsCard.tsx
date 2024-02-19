@@ -10,32 +10,35 @@ import {
 
 // type DetailType = {};
 
-export default function DetailsCard({ item }) {
+const DetailsCard = ({ entry }) => {
+  const { id, name, image, description } = entry;
   return (
     <div>
       <Card elevation={3}>
-        <CardHeader title={item.name} className="card-title" />
+        <CardHeader key={id} title={name} className="card-title" />
         <CardMedia
           component="img"
           height="194"
-          image={item.image}
-          alt={item.name}
+          image={image}
+          alt="entry image"
         />
         <CardContent>
           <Typography variant="body2" color="text.secondary">
-            {item.description}
+            {description}
           </Typography>
         </CardContent>
       </Card>
     </div>
   );
-}
+};
+
+export default DetailsCard;
 
 //   <div class="card" style="width: 18rem;">
-//   <img class="card-img-top" src="..." alt="Card image cap">
+//   <img class="card-img-top" src={item.image} alt="Card image">
 //   <div class="card-body">
-//     <h5 class="card-title">Card title</h5>
-//     <p class="card-text">Some quick example text to build on the card title and make up the bulk of the card's content.</p>
+//     <h5 class="card-title">{item.name}</h5>
+//     <p class="card-text">{item.description}</p>
 //   </div>
 //   <ul class="list-group list-group-flush">
 //     <li class="list-group-item">Cras justo odio</li>

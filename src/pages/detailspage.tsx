@@ -1,67 +1,96 @@
-import React from "react";
-import Navbar from "../components/Navbar";
+import React, { useState, useEffect } from "react";
 import { useParams } from "react-router-dom";
-import { useEffect, useState } from "react";
-import { DetailType } from "../types/Customtypes";
-import { Grid, Container } from "@mui/material";
-import MyCard from "../components/MyCard";
+import {
+  CreatureType,
+  EquipmentItem,
+  MaterialType,
+  MonsterType,
+  TreasureType,
+} from "../types/Customtypes";
+import Navbar from "../components/Navbar";
 
-const DetailsPage = () => {
-  const [item, setItem] = useState<DetailType[]>([]);
+type EntryType =
+  | CreatureType
+  | MaterialType
+  | MonsterType
+  | TreasureType
+  | EquipmentItem;
+
+const DetailsPage = <T extends EntryType>() => {
+  const [entry, setEntry] = useState<T | null>(null);
   const params = useParams<{ id: string }>();
-  const { id } = params;
 
   useEffect(() => {
-    fetch(`https://botw-compendium.herokuapp.com/api/v3/compendium/entry/${id}`)
-      .then((res) => res.json())
-      .then((data) => setItem([data]))
-      .catch((error) => {
-        console.error(error);
-      });
-  }, [id]);
+    const getEntry = async () => {
+      const result = await fetch(
+        `https://botw-compendium.herokuapp.com/api/v3/compendium/entry/${params.id}`
+      );
+      const data: T = await result.json();
+
+      setEntry(data);
+    };
+    getEntry();
+  }, [params.id]);
+
+  if (!entry) {
+    return <div>Loading...</div>; // Add loading state
+  }
+  function capitalizeWords(str: string) {
+    return str.replace(/\b\w/g, (char, index) => {
+      if (index > 0 && str[index - 1] === "'") {
+        return char.toLowerCase();
+      } else {
+        return char.toUpperCase();
+      }
+    });
+  }
+
+  // <h1>{capitalizeWords(entry.name)}</h1>
+  // {capitalizeWords(entry.cooking_effect)}
+  // {capitalizeWords(entry.drops.join(", "))}
 
   return (
     <>
       <Navbar />
-      <Container>
-        <Grid container>
-          {item.map((item) => (
-            <Grid item key={item.id} xs={12} sm={6} md={4} lg={3}>
-              <MyCard item={item} />
-            </Grid>
-          ))}
-        </Grid>
-      </Container>
+      <h1>{entry.name}</h1>
+      <img src={entry.image} alt={entry.name} />
+      {"common_locations" in entry && entry.common_locations && (
+        <p>
+          <strong>Common Locations:</strong> {entry.common_locations.join(", ")}
+        </p>
+      )}
+      <p>
+        <strong>Description:</strong> {entry.description}{" "}
+      </p>
+      {"properties" in entry && (
+        <>
+          <p>
+            <strong>Attack Power:</strong> {entry.properties.attack}
+          </p>
+          <p>
+            <strong>Defense Power:</strong> {entry.properties.defense}
+          </p>
+        </>
+      )}
+
+      {"cooking_effect" in entry && (
+        <p>
+          <strong>Cooking Effect:</strong> {entry.cooking_effect}
+        </p>
+      )}
+      {"edible" in entry && <p>Edible: {entry.edible ? "Yes" : "No"}</p>}
+      {"hearts_recovered" in entry && (
+        <p>
+          <strong>Hearts Recovered:</strong> {entry.hearts_recovered}
+        </p>
+      )}
+      {"drops" in entry && entry.drops && entry.drops.length > 0 && (
+        <p>
+          <strong>Drops:</strong> {entry.drops.join(", ")}
+        </p>
+      )}
     </>
   );
 };
 
 export default DetailsPage;
-
-// import { Grid, Container, Paper } from "@mui/material";
-// import React from "react";
-// import { useEffect, useState } from "react";
-// import { CompendiumItem } from "../types/Customtypes";
-// import MyCard from "../components/MyCard";
-
-// export default function Compendium() {
-//   const [compendium, setCompendium] = useState<CompendiumItem[]>([]);
-
-//   useEffect(() => {
-//     fetch("http://localhost:3000/data")
-//       .then((response) => response.json())
-//       .then((data) => setCompendium(data));
-//   }, []);
-
-//   return (
-//     <Container>
-//       <Grid container>
-//         {compendium.map((item) => (
-//           <Grid item key={item.id} xs={12} sm={6} md={4} lg={3}>
-//             <MyCard item={item} />
-//           </Grid>
-//         ))}
-//       </Grid>
-//     </Container>
-//   );
-// }

@@ -6,7 +6,6 @@ import { ProtectedRouteProps } from "../types/Customtypes";
 
 const ProtectedRoute = ({ children }: ProtectedRouteProps) => {
   const { user } = useContext(AuthContext);
-  console.log("user", user);
   const navigate = useNavigate();
 
   useEffect(() => {

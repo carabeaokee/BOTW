@@ -18,11 +18,9 @@ export interface ItemEquipment {
 
 export type FullEquipment = EquipmentItem & EquipmentProps;
 
-export type DetailType = FullEquipment &
-  CreatureType &
-  MaterialType &
-  MonsterType &
-  TreasureType;
+export type DetailType =
+  // | FullEquipment
+  CreatureType | MaterialType | MonsterType | TreasureType | EquipmentItem;
 
 export declare type EquipmentItem = {
   category: string;
