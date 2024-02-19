@@ -50,3 +50,21 @@ button {
   color: white;
   text-decoration: underline;
 }
+
+@font-face {
+  font-family: Hylian;
+  src: url(".../assets/fonts/HyliaSerifBeta-Regular.otf") format("truetype");
+}
+
+@font-face {
+  font-family: Zelda;
+  src: url("The-Wild-Breath-of-Zelda.otf") format("truetype");
+}
+
+.h12 {
+  font-family: Zelda;
+}
+
+.h1 {
+  font-family: Hylian;
+}

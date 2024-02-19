@@ -1,8 +1,17 @@
 @font-face {
   font-family: Hylian;
-  src: url(.../assets/icons/Hylian.ttf);
+  src: url(".../assets/fonts/Hylian.ttf") format("truetype");
+}
+
+@font-face {
+  font-family: Zelda;
+  src: url(The-Wild-Breath-of-Zelda.otf) format("truetype");
 }
 
 .card-title {
-  font-family: Hylian;
+  font-family: Zelda;
+}
+
+h1 {
+  font-family: HyliaSerif;
 }

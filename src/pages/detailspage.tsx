@@ -1,4 +1,5 @@
 import React, { useState, useEffect } from "react";
+// import { Box, Card, CardCover, CardContent, Typography } from "@mui/joy";
 import { useParams } from "react-router-dom";
 import {
   CreatureType,
@@ -8,6 +9,8 @@ import {
   TreasureType,
 } from "../types/Customtypes";
 import Navbar from "../components/Navbar";
+import "../App.css";
+import "../components/css/style.css";
 
 type EntryType =
   | CreatureType
@@ -26,8 +29,8 @@ const DetailsPage = <T extends EntryType>() => {
         `https://botw-compendium.herokuapp.com/api/v3/compendium/entry/${params.id}`
       );
       const data: T = await result.json();
-
-      setEntry(data);
+      console.log("data post fetch", data);
+      setEntry(data.data);
     };
     getEntry();
   }, [params.id]);
@@ -45,14 +48,16 @@ const DetailsPage = <T extends EntryType>() => {
     });
   }
 
-  // <h1>{capitalizeWords(entry.name)}</h1>
-  // {capitalizeWords(entry.cooking_effect)}
-  // {capitalizeWords(entry.drops.join(", "))}
+  console.log(entry);
+
+  //   <div style={{ fontFamily: 'YourFontName' }}>
+  //   This text will use YourFontName.
+  // </div>
 
   return (
     <>
       <Navbar />
-      <h1>{entry.name}</h1>
+      <h1>{capitalizeWords(entry.name)}</h1>
       <img src={entry.image} alt={entry.name} />
       {"common_locations" in entry && entry.common_locations && (
         <p>
@@ -75,10 +80,15 @@ const DetailsPage = <T extends EntryType>() => {
 
       {"cooking_effect" in entry && (
         <p>
-          <strong>Cooking Effect:</strong> {entry.cooking_effect}
+          <strong>Cooking Effect:</strong>{" "}
+          {capitalizeWords(entry.cooking_effect)}
         </p>
       )}
-      {"edible" in entry && <p>Edible: {entry.edible ? "Yes" : "No"}</p>}
+      {"edible" in entry && (
+        <p>
+          <strong> Edible:</strong> {entry.edible ? "Yes" : "No"}
+        </p>
+      )}
       {"hearts_recovered" in entry && (
         <p>
           <strong>Hearts Recovered:</strong> {entry.hearts_recovered}
@@ -86,7 +96,7 @@ const DetailsPage = <T extends EntryType>() => {
       )}
       {"drops" in entry && entry.drops && entry.drops.length > 0 && (
         <p>
-          <strong>Drops:</strong> {entry.drops.join(", ")}
+          <strong>Drops:</strong> {capitalizeWords(entry.drops.join(", "))}
         </p>
       )}
     </>

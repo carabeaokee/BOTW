@@ -1,7 +1,18 @@
 import React from "react";
-import { Card, CardHeader, CardMedia, IconButton } from "@mui/material";
 import { NavLink } from "react-router-dom";
-import FavoriteIcon from "@mui/icons-material/Favorite";
+import {
+  IconButton,
+  Box,
+  Divider,
+  Card,
+  CardCover,
+  CardContent,
+  Typography,
+  Link,
+  AspectRatio,
+  CardOverflow,
+} from "@mui/joy";
+import Favorite from "@mui/icons-material/Favorite";
 
 function capitalizeWords(str: string) {
   return str.replace(/\b\w/g, (char, index) => {
@@ -15,45 +26,25 @@ function capitalizeWords(str: string) {
 
 export default function MyCard({ item }) {
   return (
-    <div>
-      <Card elevation={3}>
-        <CardHeader title={capitalizeWords(item.name)} className="card-title" />
-        <IconButton aria-label="add to favorites">
-          <FavoriteIcon />
-        </IconButton>
-        <CardMedia
-          component="img"
-          height="194"
-          image={item.image}
-          alt={item.name}
+    <>
+      <Card sx={{ minHeight: "280px", width: 320 }}>
+        <CardCover>
+          <img src={item.image} alt={item.name} />
+        </CardCover>
+        <CardCover
+          sx={{
+            background:
+              "linear-gradient(to top, rgba(0,0,0,0.4), rgba(0,0,0,0) 200px), linear-gradient(to top, rgba(0,0,0,0.8), rgba(0,0,0,0) 300px)",
+          }}
         />
-        <NavLink to={`/${item.id}`}>More Info</NavLink>
+        <CardContent sx={{ justifyContent: "flex-end" }}>
+          <Typography level="title-lg">
+            <NavLink to={`/${item.id}`} style={{ color: "white" }}>
+              {capitalizeWords(item.name)}
+            </NavLink>
+          </Typography>
+        </CardContent>
       </Card>
-    </div>
+    </>
   );
 }
-
-// import React from "react";
-// import { Card, CardHeader, CardMedia, IconButton } from "@mui/material";
-// import { NavLink } from "react-router-dom";
-// import FavoriteIcon from "@mui/icons-material/Favorite";
-
-// export default function MyCard({ item }) {
-//   return (
-//     <div>
-//       <Card elevation={3}>
-//         <CardHeader title={item.name} className="card-title" />
-//         <IconButton aria-label="add to favorites">
-//           <FavoriteIcon />
-//         </IconButton>
-//         <CardMedia
-//           component="img"
-//           height="194"
-//           image={item.image}
-//           alt={item.name}
-//         />
-//         <NavLink to={`/${item.id}`}>More Info</NavLink>
-//       </Card>
-//     </div>
-//   );
-// }
