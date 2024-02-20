@@ -11,88 +11,113 @@ import {
 import { LockOutlined } from "@mui/icons-material";
 import React from "react";
 import Navbar from "../components/Navbar";
-import { useState } from "react";
-import { Link } from "react-router-dom";
+import { useState, useContext, useEffect } from "react";
+import { Link, useNavigate } from "react-router-dom";
+import { AuthContext } from "../components/AuthContext";
 
 const Register = () => {
+  const { user, signupUser } = useContext(AuthContext);
+  const navigate = useNavigate();
+
   const [name, setName] = useState("");
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
+  const [repeatPassword, setRepeatPassword] = useState("");
 
-  const handleRegister = async () => {};
+  const validatePassword = (password: string, repeatPassword: string) => {
+    return password === repeatPassword;
+  };
+
+  // const handleRegister = async () => {};
+
+  const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
+    e.preventDefault();
+    const validPassword = validatePassword(password, repeatPassword);
+    if (validPassword) {
+      console.log("Attempting to sign up with: ", email, password);
+      signupUser(email, password);
+    } else {
+      console.log("Passwords do not match");
+    }
+  };
+
+  useEffect(() => {
+    if (user) {
+      navigate("/account");
+    }
+  }, [user, navigate]);
+
+  const handleEmailChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    setEmail(e.target.value);
+  };
+
+  const handlePasswordChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    setPassword(e.target.value);
+  };
+
+  const handleRepeatPasswordChange = (
+    e: React.ChangeEvent<HTMLInputElement>
+  ) => {
+    setRepeatPassword(e.target.value);
+  };
 
   return (
     <>
       <Navbar />
-      <Container maxWidth="xs">
-        <CssBaseline />
-        <Box
-          sx={{
-            mt: 20,
-            display: "flex",
-            flexDirection: "column",
-            alignItems: "center",
-          }}
-        >
-          <Avatar sx={{ m: 1, bgcolor: "primary.light" }}>
-            <LockOutlined />
-          </Avatar>
-          <Typography variant="h5">Register</Typography>
-          <Box sx={{ mt: 3 }}>
-            <Grid container spacing={2}>
-              <Grid item xs={12}>
-                <TextField
-                  name="name"
-                  required
-                  fullWidth
-                  id="name"
-                  label="Name"
-                  autoFocus
-                  value={name}
-                  onChange={(e) => setName(e.target.value)}
-                />
-              </Grid>
+      <div>
+        <form onSubmit={handleSubmit}>
+          <h1>Sign Up</h1>
+          <br />
+          <div className="mb-3">
+            <label htmlFor="email" className="form-label">
+              Email Address
+            </label>
+            <input
+              type="email"
+              className="form-control"
+              id="email"
+              placeholder="Enter Email"
+              value={email}
+              onChange={handleEmailChange}
+            />
+          </div>
 
-              <Grid item xs={12}>
-                <TextField
-                  required
-                  fullWidth
-                  id="email"
-                  label="Email Address"
-                  name="email"
-                  value={email}
-                  onChange={(e) => setEmail(e.target.value)}
-                />
-              </Grid>
-              <Grid item xs={12}>
-                <TextField
-                  required
-                  fullWidth
-                  name="password"
-                  label="Password"
-                  type="password"
-                  id="password"
-                  value={password}
-                  onChange={(e) => setPassword(e.target.value)}
-                />
-              </Grid>
-            </Grid>
-            <Button
-              fullWidth
-              variant="contained"
-              sx={{ mt: 3, mb: 2 }}
-              onClick={handleRegister}
-            >
-              Register
-            </Button>
-            <Grid container justifyContent="flex-end">
-              <Grid item>
-                <Link to="/login">Already have an account? Login</Link>
-              </Grid>
-            </Grid>
-          </Box>
-        </Box>
-      </Container>
+          <div className="mb-3">
+            <label htmlFor="password" className="form-label">
+              Password
+            </label>
+            <input
+              type="password"
+              className="form-control"
+              id="password"
+              placeholder="Password"
+              value={password}
+              onChange={handlePasswordChange}
+            />
+          </div>
+          <div className="mb-3">
+            <label htmlFor="repeatPassword" className="form-label">
+              Password
+            </label>
+            <input
+              type="password"
+              className="form-control"
+              id="repeatPassword"
+              placeholder="Repeat Password"
+              value={repeatPassword}
+              onChange={handleRepeatPasswordChange}
+            />
+          </div>
+
+          <button type="submit" className="btn btn-primary">
+            Sign Up
+          </button>
+        </form>
+        <br />
+        <p>
+          <Link to="/login">Already have an account? Login</Link>
+        </p>
+      </div>
     </>
   );
 };

@@ -1,0 +1,11 @@
+@font-face {
+  font-family: "Hylian";
+  src: local("Hylian"),
+    url("../src/assets/fonts/HyliaSerifBeta-Regular.otf") format("truetype");
+}
+
+@font-face {
+  font-family: "Zelda";
+  src: local("Zelda"),
+    url("../src/assets/fonts/The-Wild-Breath-of-Zelda.otf") format("truetype");
+}

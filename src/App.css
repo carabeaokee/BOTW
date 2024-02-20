@@ -50,7 +50,7 @@ button {
   color: white;
   text-decoration: underline;
 }
-
+/* 
 @font-face {
   font-family: Hylian;
   src: url(".../assets/fonts/HyliaSerifBeta-Regular.otf") format("truetype");
@@ -58,13 +58,25 @@ button {
 
 @font-face {
   font-family: Zelda;
-  src: url("The-Wild-Breath-of-Zelda.otf") format("truetype");
+  src: url(".../assets/fonts/The-Wild-Breath-of-Zelda.otf") format("truetype");
+} */
+
+@font-face {
+  font-family: "Hylian";
+  src: local("Hylian"),
+    url("../src/assets/fonts/HyliaSerifBeta-Regular.otf") format("truetype");
 }
 
-.h12 {
+@font-face {
+  font-family: "Zelda";
+  src: local("Zelda"),
+    url("../src/assets/fonts/The-Wild-Breath-of-Zelda.otf") format("truetype");
+}
+
+.zelda-title {
   font-family: Zelda;
 }
 
-.h1 {
+.hylian-title {
   font-family: Hylian;
 }

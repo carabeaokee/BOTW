@@ -1,8 +1,8 @@
 import { LockOutlined } from "@mui/icons-material";
 import React from "react";
 import { AuthContext } from "../components/AuthContext";
-import { useNavigate } from "react-router-dom";
-import { useContext } from "react";
+import { useNavigate, Link } from "react-router-dom";
+import { useContext, useState, useEffect } from "react";
 import "../components/css/login.css";
 import {
   Container,
@@ -14,80 +14,78 @@ import {
   Button,
   Grid,
 } from "@mui/material";
-import { useState } from "react";
-import { Link } from "react-router-dom";
 import Navbar from "../components/Navbar";
 
 const Login = () => {
-  const { loginUser } = useContext(AuthContext) || {};
-  // const navigate = useNavigate();
+  const { user, loginUser } = useContext(AuthContext);
+  const navigate = useNavigate();
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
 
-  // const handleLogin = (e: React.MouseEvent<HTMLButtonElement>) => {
-  //   e.preventDefault();
-  //   loginUser?.();
-  //   navigate("/account");
-  // };
+  const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
+    e.preventDefault();
+    console.log("Attempting to sign in with: ", email, password);
+    loginUser(email, password);
+  };
+
+  useEffect(() => {
+    if (user) {
+      navigate("/account");
+    }
+  }, [user, navigate]);
+
+  const handleEmailChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    setEmail(e.target.value);
+  };
+
+  const handlePasswordChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    setPassword(e.target.value);
+  };
 
   return (
     <>
       <Navbar />
-      <Container maxWidth="xs">
-        <CssBaseline />
-        <Box
-          sx={{
-            mt: 20,
-            display: "flex",
-            flexDirection: "column",
-            alignItems: "center",
-          }}
-        >
-          <Avatar sx={{ m: 1, bgcolor: "primary.light" }}>
-            <LockOutlined />
-          </Avatar>
-          <Typography variant="h5">Login</Typography>
-          <Box sx={{ mt: 1 }}>
-            <TextField
-              margin="normal"
-              required
-              fullWidth
+      <div>
+        <h1>Sign In</h1>
+        <br />
+        <form onSubmit={handleSubmit}>
+          <div className="mb-3">
+            <label htmlFor="email" className="form-label">
+              Email address
+            </label>
+            <input
+              type="email"
+              className="form-control"
               id="email"
-              label="Email Address"
-              name="email"
-              autoFocus
+              placeholder="Enter email"
               value={email}
-              onChange={(e) => setEmail(e.target.value)}
+              onChange={handleEmailChange}
             />
+          </div>
 
-            <TextField
-              margin="normal"
-              required
-              fullWidth
-              id="password"
-              name="password"
-              label="Password"
+          <div className="mb-3">
+            <label htmlFor="password" className="form-label">
+              Password
+            </label>
+            <input
               type="password"
+              className="form-control"
+              id="password"
+              placeholder="Password"
               value={password}
-              onChange={(e) => setPassword(e.target.value)} // Add this line to fix the code
+              onChange={handlePasswordChange}
             />
+          </div>
 
-            <Button
-              fullWidth
-              variant="contained"
-              sx={{ mt: 3, mb: 2 }}
-              onClick={loginUser}
-            >
-              Login
-            </Button>
-            <Grid container justifyContent="flex-end">
-              <Grid item>
-                <Link to="/register">Don't have an account? Register</Link>
-              </Grid>
-            </Grid>
-          </Box>
-        </Box>
-      </Container>
+          <button type="submit" className="btn btn-primary">
+            Sign In
+          </button>
+        </form>
+        <br />
+        <p>
+          <Link to="/register">Don't have an account? Register</Link>
+        </p>
+      </div>
     </>
   );
 };

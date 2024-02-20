@@ -10,7 +10,6 @@ import {
 } from "../types/Customtypes";
 import Navbar from "../components/Navbar";
 import "../App.css";
-import "../components/css/style.css";
 
 type EntryType =
   | CreatureType
