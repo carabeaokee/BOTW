@@ -4,6 +4,7 @@ import { TreasureType } from "../types/Customtypes";
 import { Container, Grid, TextField } from "@mui/material";
 import MyCard from "../components/MyCard";
 import Navbar from "../components/Navbar";
+import Infinity from "../assets/icons/infinity.svg";
 
 function Treasure() {
   const [treasure, setTreasure] = useState<TreasureType[] | null>(null);
@@ -25,6 +26,28 @@ function Treasure() {
   useEffect(() => {
     getTreasure();
   }, []);
+
+  if (!treasure) {
+    return (
+      <div>
+        <img
+          src={Infinity}
+          alt="Loading-Icon"
+          style={{
+            width: "500px", // Set the width
+            height: "500px", // Set the height
+            display: "block",
+            margin: "auto",
+            position: "absolute",
+            top: "0",
+            bottom: "0",
+            left: "0",
+            right: "0",
+          }}
+        />
+      </div>
+    );
+  }
 
   const filteredTreasure = treasure?.filter((treasure) =>
     treasure.name.toLowerCase().includes(searchTerm.toLowerCase())

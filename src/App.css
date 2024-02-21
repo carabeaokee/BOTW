@@ -73,10 +73,42 @@ button {
     url("../src/assets/fonts/The-Wild-Breath-of-Zelda.otf") format("truetype");
 }
 
-.zelda-title {
-  font-family: Zelda;
+@font-face {
+  font-family: "Kode";
+  src: local("Kode"),
+    url("../src/assets/fonts/KodeMono-VariableFont_wght.ttf") format("truetype");
 }
 
-.hylian-title {
+@font-face {
+  font-family: "Jacquard";
+  src: local("Jacquard"),
+    url("../src/assets/fonts/JacquardaBastarda9-Regular.ttf") format("truetype");
+}
+
+@font-face {
+  font-family: "Macondo";
+  src: local("Macondo"),
+    url("../src/assets/fonts/Macondo-Regular.ttf") format("truetype");
+}
+
+@font-face {
+  font-family: "Orbitron";
+  src: local("Orbitron"),
+    url("../src/assets/fonts/Orbitron-VariableFont_wght.ttf") format("truetype");
+}
+
+.account-link {
+  font-family: Orbitron;
+}
+
+.home-link {
+  font-family: Orbitron;
+}
+
+.category-link {
+  font-family: Macondo;
+}
+
+h1 {
   font-family: Hylian;
 }

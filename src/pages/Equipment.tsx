@@ -4,6 +4,7 @@ import { EquipmentItem } from "../types/Customtypes";
 import { Container, Grid, TextField } from "@mui/material";
 import MyCard from "../components/MyCard";
 import Navbar from "../components/Navbar";
+import Infinity from "../assets/icons/infinity.svg";
 
 function Equipment() {
   const [equipment, setEquipment] = useState<EquipmentItem[] | null>(null);
@@ -25,6 +26,28 @@ function Equipment() {
   useEffect(() => {
     getEquipment();
   }, []);
+
+  if (!equipment) {
+    return (
+      <div>
+        <img
+          src={Infinity}
+          alt="Loading-Icon"
+          style={{
+            width: "500px", // Set the width
+            height: "500px", // Set the height
+            display: "block",
+            margin: "auto",
+            position: "absolute",
+            top: "0",
+            bottom: "0",
+            left: "0",
+            right: "0",
+          }}
+        />
+      </div>
+    );
+  }
 
   const filteredEquipment = equipment?.filter((equipment) =>
     equipment.name.toLowerCase().includes(searchTerm.toLowerCase())

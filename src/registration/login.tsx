@@ -1,19 +1,8 @@
-import { LockOutlined } from "@mui/icons-material";
 import React from "react";
 import { AuthContext } from "../components/AuthContext";
 import { useNavigate, Link } from "react-router-dom";
 import { useContext, useState, useEffect } from "react";
 import "../components/css/login.css";
-import {
-  Container,
-  CssBaseline,
-  Box,
-  Avatar,
-  Typography,
-  TextField,
-  Button,
-  Grid,
-} from "@mui/material";
 import Navbar from "../components/Navbar";
 
 const Login = () => {

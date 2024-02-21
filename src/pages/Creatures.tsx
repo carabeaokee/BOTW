@@ -4,6 +4,7 @@ import { CreatureType } from "../types/Customtypes";
 import { Container, Grid, TextField } from "@mui/material";
 import MyCard from "../components/MyCard";
 import Navbar from "../components/Navbar";
+import Infinity from "../assets/icons/infinity.svg";
 
 function Creatures() {
   const [creatures, setCreatures] = useState<CreatureType[] | null>(null);
@@ -25,6 +26,28 @@ function Creatures() {
   useEffect(() => {
     getCreatures();
   }, []);
+
+  if (!creatures) {
+    return (
+      <div>
+        <img
+          src={Infinity}
+          alt="Loading-Icon"
+          style={{
+            width: "500px", // Set the width
+            height: "500px", // Set the height
+            display: "block",
+            margin: "auto",
+            position: "absolute",
+            top: "0",
+            bottom: "0",
+            left: "0",
+            right: "0",
+          }}
+        />
+      </div>
+    );
+  }
 
   const filteredCreatures = creatures?.filter((creature) =>
     creature.name.toLowerCase().includes(searchTerm.toLowerCase())

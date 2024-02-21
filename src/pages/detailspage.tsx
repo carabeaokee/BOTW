@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from "react";
 // import { Box, Card, CardCover, CardContent, Typography } from "@mui/joy";
-import { useParams } from "react-router-dom";
+import { useParams, useNavigate } from "react-router-dom";
 import {
   CreatureType,
   EquipmentItem,
@@ -10,6 +10,8 @@ import {
 } from "../types/Customtypes";
 import Navbar from "../components/Navbar";
 import "../App.css";
+import Infinity from "../assets/icons/infinity.svg";
+import ErrorComponent from "./ErrorComponent";
 
 type EntryType =
   | CreatureType
@@ -21,37 +23,74 @@ type EntryType =
 const DetailsPage = <T extends EntryType>() => {
   const [entry, setEntry] = useState<T | null>(null);
   const params = useParams<{ id: string }>();
+  const navigate = useNavigate();
 
   useEffect(() => {
     const getEntry = async () => {
-      const result = await fetch(
-        `https://botw-compendium.herokuapp.com/api/v3/compendium/entry/${params.id}`
-      );
-      const data: T = await result.json();
-      console.log("data post fetch", data);
-      setEntry(data.data);
+      try {
+        const result = await fetch(
+          `https://botw-compendium.herokuapp.com/api/v3/compendium/entry/${params.id}`
+        );
+        if (!result.ok) {
+          throw new Error("Network response was not ok");
+        }
+        const data: T = await result.json();
+        console.log("data post fetch", data);
+        setEntry(data.data);
+      } catch (error) {
+        console.error(error);
+        navigate("/error");
+      }
     };
+
     getEntry();
-  }, [params.id]);
+  }, [params.id, navigate]);
 
   if (!entry) {
-    return <div>Loading...</div>; // Add loading state
+    return (
+      <div>
+        <img
+          src={Infinity}
+          alt="Loading-Icon"
+          style={{
+            width: "500px", // Set the width
+            height: "500px", // Set the height
+            display: "block",
+            margin: "auto",
+            position: "absolute",
+            top: "0",
+            bottom: "0",
+            left: "0",
+            right: "0",
+          }}
+        />
+      </div>
+    );
   }
+
   function capitalizeWords(str: string) {
-    return str.replace(/\b\w/g, (char, index) => {
-      if (index > 0 && str[index - 1] === "'") {
-        return char.toLowerCase();
+    return str.replace(/\b\w+\b/g, (word) => {
+      // Regular expression to match Roman numerals
+      const romanNumeralRegex =
+        /^(M{0,3})(CM|CD|D?C{0,3})(XC|XL|L?X{0,3})(IX|IV|V?I{0,3})$/;
+
+      if (romanNumeralRegex.test(word.toUpperCase())) {
+        // If the word is a Roman numeral, return it in uppercase
+        return word.toUpperCase();
       } else {
-        return char.toUpperCase();
+        // Otherwise, apply the original capitalization rules
+        return word.replace(/\b\w/g, (char, index) => {
+          if (index > 0 && word[index - 1] === "'") {
+            return char.toLowerCase();
+          } else {
+            return char.toUpperCase();
+          }
+        });
       }
     });
   }
 
-  console.log(entry);
-
-  //   <div style={{ fontFamily: 'YourFontName' }}>
-  //   This text will use YourFontName.
-  // </div>
+  // console.log(entry);
 
   return (
     <>

@@ -11,7 +11,7 @@ const Navbar = () => {
     if (user) {
       logoutUser?.();
     } else {
-      loginUser?.();
+      loginUser?.("example@example.com", "password");
     }
   };
 
@@ -22,13 +22,27 @@ const Navbar = () => {
     <Nav>
       <TriforceIcon />
       <NavMenu>
-        <NavLink to="/">Home</NavLink>
-        <NavLink to="/creatures">Creatures</NavLink>
-        <NavLink to="/monsters">Monsters</NavLink>
-        <NavLink to="/equipment">Equipment</NavLink>
-        <NavLink to="/materials">Materials</NavLink>
-        <NavLink to="/treasure">Treasure</NavLink>
-        <NavLink to="/account">Account</NavLink>
+        <NavLink className="home-link" to="/">
+          Home
+        </NavLink>
+        <NavLink className="category-link" to="/creatures">
+          <img src="../assets/icons/spider.svg" alt="Monsters Icon" />
+        </NavLink>
+        <NavLink className="category-link" to="/monsters">
+          Monsters
+        </NavLink>
+        <NavLink className="category-link" to="/equipment">
+          Equipment
+        </NavLink>
+        <NavLink className="category-link" to="/materials">
+          Materials
+        </NavLink>
+        <NavLink className="category-link" to="/treasure">
+          Treasure
+        </NavLink>
+        <NavLink className="account-link" to="/account">
+          Account
+        </NavLink>
       </NavMenu>
       <NavBtn onClick={handleClick}>
         <NavBtnLink to={navPath}>{navLabel}</NavBtnLink>

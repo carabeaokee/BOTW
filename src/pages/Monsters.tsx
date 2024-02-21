@@ -4,6 +4,7 @@ import { MonsterType } from "../types/Customtypes";
 import { Container, Grid, TextField } from "@mui/material";
 import MyCard from "../components/MyCard";
 import Navbar from "../components/Navbar";
+import Infinity from "../assets/icons/infinity.svg";
 
 function Monsters() {
   const [monsters, setMonsters] = useState<MonsterType[] | null>(null);
@@ -25,6 +26,28 @@ function Monsters() {
   useEffect(() => {
     getMonsters();
   }, []);
+
+  if (!monsters) {
+    return (
+      <div>
+        <img
+          src={Infinity}
+          alt="Loading-Icon"
+          style={{
+            width: "500px", // Set the width
+            height: "500px", // Set the height
+            display: "block",
+            margin: "auto",
+            position: "absolute",
+            top: "0",
+            bottom: "0",
+            left: "0",
+            right: "0",
+          }}
+        />
+      </div>
+    );
+  }
 
   const filteredMonsters = monsters?.filter((monster) =>
     monster.name.toLowerCase().includes(searchTerm.toLowerCase())

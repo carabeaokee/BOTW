@@ -16,7 +16,9 @@ export const Nav = styled.nav`
 export const NavLink = styled(Link)`
   color: #fff;
   display: flex;
+  margin: 0 1rem;
   align-items: center;
+  font-size: 1.5rem;
   text-decoration: none;
   padding: 0 1rem;
   height: 100%;
@@ -52,7 +54,7 @@ export const NavMenu = styled.div`
 
   /* Third Nav */
   /* width: 100vw;
-  white-space: nowrap; */
+  white-space: nowrap; 
 
   @media screen and (max-width: 768px) {
     display: none;
@@ -75,6 +77,7 @@ export const NavBtn = styled.nav`
 
 export const NavBtnLink = styled(Link)`
   border-radius: 4px;
+  font-family: Kode;
   background: #256ce1;
   padding: 10px 22px;
   color: #fff;

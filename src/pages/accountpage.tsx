@@ -1,13 +1,15 @@
 import React from "react";
 import Navbar from "../components/Navbar";
+import "../components/css/account.css";
+import { useState } from "react";
 
 function Account() {
+  const [username, setUsername] = useState("User"); // Replace "User" with the actual username
+
   return (
     <>
       <Navbar />
-      <div>
-        <h1>Account Page</h1>
-      </div>
+      <h1>Welcome {username} </h1>
     </>
   );
 }
