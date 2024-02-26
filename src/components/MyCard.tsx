@@ -33,15 +33,12 @@ interface Item {
 
 function capitalizeWords(str: string) {
   return str.replace(/\b\w+\b/g, (word) => {
-    // Regular expression to match Roman numerals
     const romanNumeralRegex =
       /^(M{0,3})(CM|CD|D?C{0,3})(XC|XL|L?X{0,3})(IX|IV|V?I{0,3})$/;
 
     if (romanNumeralRegex.test(word.toUpperCase())) {
-      // If the word is a Roman numeral, return it in uppercase
       return word.toUpperCase();
     } else {
-      // Otherwise, apply the original capitalization rules
       return word.replace(/\b\w/g, (char, index) => {
         if (index > 0 && word[index - 1] === "'") {
           return char.toLowerCase();
@@ -61,29 +58,17 @@ export default function MyCard({ item }: { item: Item }) {
   const { user } = useContext(AuthContext);
   const [hover, setHover] = useState(false);
   const [favourites, setFavourites] = useState([]);
-
-  // const handleFavourite = () => {
-  //   console.log("Favourite clicked", item);
-  //   if (user) {
-  //     const uid = user.uid;
-  //     const path = doc(db, "users", uid);
-  //     const data = {
-  //       favourites: item.id,
-  //     };
-  //     const docRef = setDoc(path, data, { merge: false });
-  //     console.log("docRef", docRef);
-  //   }
-  // };
+  // const [isFavourite, setIsFavourite] = useState(false);
 
   useEffect(() => {
     if (user) {
       const fetchFavourites = async () => {
         const uid = user.uid;
-        const path = doc(db, "users", uid, "favourites");
+        const path = doc(db, "users", uid);
         const docSnap = await getDoc(path);
 
         if (docSnap.exists()) {
-          setFavourites(docSnap.data().items);
+          setFavourites(docSnap.data().favourites || []);
         }
       };
 
@@ -91,42 +76,46 @@ export default function MyCard({ item }: { item: Item }) {
     }
   }, [user]);
 
+  // let favourites: string[] = [];
+
   const isFavourite = favourites.includes(item.id);
 
   const handleFavourite = async () => {
     console.log("Favourite clicked", item);
     if (user) {
       const uid = user.uid;
-      const path = doc(db, "users", uid, "favourites", item.id);
+      const path = doc(db, "users", uid);
       if (isFavourite) {
-        await updateDoc(path, { items: arrayRemove(item.id) });
+        await updateDoc(path, { favourites: arrayRemove(item.id) });
         console.log("Item removed from favourites");
+        setFavourites(favourites.filter((fav) => fav !== item.id)); // remove item from favourites
       } else {
-        await updateDoc(path, { items: arrayUnion(item.id) });
+        await updateDoc(path, { favourites: arrayUnion(item.id) });
         console.log("Item added to favourites");
+        setFavourites([...favourites, item.id]); // add item to favourites
       }
     }
   };
 
-  const handleUpdateFavourite = async (newData) => {
-    console.log("Update favourite clicked", item);
-    if (user) {
-      const uid = user.uid;
-      const path = doc(db, "users", uid, "favourites", item.id);
-      await updateDoc(path, newData);
-      console.log("Item updated in favourites");
-    }
-  };
+  // const handleUpdateFavourite = async (newData) => {
+  //   console.log("Update favourite clicked", item);
+  //   if (user) {
+  //     const uid = user.uid;
+  //     const path = doc(db, "users", uid, "favourites", item.id);
+  //     await updateDoc(path, newData);
+  //     console.log("Item updated in favourites");
+  //   }
+  // };
 
-  const handleUnfavourite = async () => {
-    console.log("Unfavourite clicked", item);
-    if (user) {
-      const uid = user.uid;
-      const path = doc(db, "users", uid, "favourites", item.id);
-      await deleteDoc(path);
-      console.log("Item removed from favourites");
-    }
-  };
+  // const handleUnfavourite = async () => {
+  //   console.log("Unfavourite clicked", item);
+  //   if (user) {
+  //     const uid = user.uid;
+  //     const path = doc(db, "users", uid, "favourites", item.id);
+  //     await deleteDoc(path);
+  //     console.log("Item removed from favourites");
+  //   }
+  // };
 
   return (
     <>
@@ -158,7 +147,7 @@ export default function MyCard({ item }: { item: Item }) {
           >
             <IconButton
               color="neutral"
-              sx={{ mr: "auto", color: isFavourite ? "red" : "inherit" }}
+              sx={{ mr: "auto", color: isFavourite ? "red" : "white" }}
               onClick={handleFavourite}
             >
               {isFavourite ? <Favorite /> : <FavoriteBorder />}

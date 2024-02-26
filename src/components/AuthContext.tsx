@@ -19,7 +19,7 @@ interface AuthContextType {
   loginUser: (email: string, password: string) => void;
   signupUser: (email: string, password: string, firstName: string) => void;
   logoutUser: () => void;
-  userChecked: boolean;
+  // userChecked: boolean;
 }
 
 const defaultValue: AuthContextType = {
@@ -34,7 +34,7 @@ const defaultValue: AuthContextType = {
   logoutUser: () => {
     throw Error("logout function not implemented");
   },
-  userChecked: false,
+  // userChecked: false,
 };
 
 export const AuthContext = createContext(defaultValue);
@@ -58,6 +58,7 @@ export const AuthProvider = ({ children }) => {
       .catch((error) => {
         const errorCode = error.code;
         const errorMessage = error.message;
+        setUser(null);
         console.log("errorCode :>> ", errorCode);
         console.log("errorMessage :>> ", errorMessage);
       });
@@ -147,7 +148,6 @@ export const AuthProvider = ({ children }) => {
         loginUser,
         logoutUser,
         user,
-        userChecked,
       }}
     >
       {children}

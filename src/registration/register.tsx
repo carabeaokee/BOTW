@@ -5,6 +5,7 @@ import { Link, useNavigate } from "react-router-dom";
 import { AuthContext } from "../components/AuthContext";
 import { db } from "../firebaseConfig";
 import { collection, addDoc, doc, getDoc, setDoc } from "firebase/firestore";
+import { getAuth, updateProfile } from "firebase/auth";
 
 const Register = () => {
   const { user, signupUser } = useContext(AuthContext);
@@ -29,13 +30,11 @@ const Register = () => {
       try {
         const userCredential = await signupUser(email, password, firstName);
         console.log("userCredential", userCredential);
-        // if (userCredential) {
-        //   const uid = userCredential.uid;
-        //   const path = doc(db, "users", uid);
-        //   await setDoc(path, { name: firstName });
-        //   console.log("User document created");
-        //   // users collection / user document {name: value} / favourites subcollection
-        // }
+        //modify user's profile
+        if (userCredential !== void 0 && userCredential.user !== null) {
+          await updateProfile(userCredential.user, { displayName: firstName });
+          console.log("User profile updated");
+        }
       } catch (error) {
         setError("Oops! Something went wrong. Please try again.");
       }
