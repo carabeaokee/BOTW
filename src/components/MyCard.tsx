@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useContext, useEffect } from "react";
 import { NavLink } from "react-router-dom";
 import {
   IconButton,
@@ -9,8 +9,27 @@ import {
   CardActions,
   Grid,
 } from "@mui/joy";
-import { FavoriteBorder } from "@mui/icons-material";
+import { Favorite, FavoriteBorder } from "@mui/icons-material";
 import "../App.css";
+import { useState } from "react";
+// import Bookmarkheart from "../assets/icons/bookmarkheart.svg";
+import { AuthContext } from "./AuthContext";
+import {
+  arrayRemove,
+  arrayUnion,
+  deleteDoc,
+  doc,
+  getDoc,
+  setDoc,
+  updateDoc,
+} from "firebase/firestore";
+import { db } from "../firebaseConfig";
+
+interface Item {
+  id: string;
+  image: string;
+  name: string;
+}
 
 function capitalizeWords(str: string) {
   return str.replace(/\b\w+\b/g, (word) => {
@@ -34,7 +53,81 @@ function capitalizeWords(str: string) {
   });
 }
 
-export default function MyCard({ item }) {
+// if you want to add the actual items to a collection within the user,
+// you should use the item id to create a
+// new document within the favourites subcollection
+
+export default function MyCard({ item }: { item: Item }) {
+  const { user } = useContext(AuthContext);
+  const [hover, setHover] = useState(false);
+  const [favourites, setFavourites] = useState([]);
+
+  // const handleFavourite = () => {
+  //   console.log("Favourite clicked", item);
+  //   if (user) {
+  //     const uid = user.uid;
+  //     const path = doc(db, "users", uid);
+  //     const data = {
+  //       favourites: item.id,
+  //     };
+  //     const docRef = setDoc(path, data, { merge: false });
+  //     console.log("docRef", docRef);
+  //   }
+  // };
+
+  useEffect(() => {
+    if (user) {
+      const fetchFavourites = async () => {
+        const uid = user.uid;
+        const path = doc(db, "users", uid, "favourites");
+        const docSnap = await getDoc(path);
+
+        if (docSnap.exists()) {
+          setFavourites(docSnap.data().items);
+        }
+      };
+
+      fetchFavourites();
+    }
+  }, [user]);
+
+  const isFavourite = favourites.includes(item.id);
+
+  const handleFavourite = async () => {
+    console.log("Favourite clicked", item);
+    if (user) {
+      const uid = user.uid;
+      const path = doc(db, "users", uid, "favourites", item.id);
+      if (isFavourite) {
+        await updateDoc(path, { items: arrayRemove(item.id) });
+        console.log("Item removed from favourites");
+      } else {
+        await updateDoc(path, { items: arrayUnion(item.id) });
+        console.log("Item added to favourites");
+      }
+    }
+  };
+
+  const handleUpdateFavourite = async (newData) => {
+    console.log("Update favourite clicked", item);
+    if (user) {
+      const uid = user.uid;
+      const path = doc(db, "users", uid, "favourites", item.id);
+      await updateDoc(path, newData);
+      console.log("Item updated in favourites");
+    }
+  };
+
+  const handleUnfavourite = async () => {
+    console.log("Unfavourite clicked", item);
+    if (user) {
+      const uid = user.uid;
+      const path = doc(db, "users", uid, "favourites", item.id);
+      await deleteDoc(path);
+      console.log("Item removed from favourites");
+    }
+  };
+
   return (
     <>
       <Grid container spacing={2}>
@@ -63,8 +156,12 @@ export default function MyCard({ item }) {
               right: 12,
             }}
           >
-            <IconButton color="neutral" sx={{ mr: "auto" }}>
-              <FavoriteBorder />
+            <IconButton
+              color="neutral"
+              sx={{ mr: "auto", color: isFavourite ? "red" : "inherit" }}
+              onClick={handleFavourite}
+            >
+              {isFavourite ? <Favorite /> : <FavoriteBorder />}
             </IconButton>
           </CardActions>
           <CardContent
@@ -77,9 +174,12 @@ export default function MyCard({ item }) {
           >
             <Typography level="title-lg">
               <NavLink
+                className="item-link"
                 to={`/${item.id}`}
+                onMouseEnter={() => setHover(true)}
+                onMouseLeave={() => setHover(false)}
                 style={{
-                  color: "white",
+                  color: hover ? "aqua" : "white",
                   fontFamily: "Orbitron",
                   fontSize: "18px",
                 }}

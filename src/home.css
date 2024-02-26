@@ -31,8 +31,8 @@ img {
   align-items: center;
   font-family: "Hylian";
   padding: 3% 3%;
-  flex-wrap: wrap; /* Allow items to wrap onto multiple lines */
-  gap: 10px; /* Increase the spacing between items */
+  /* flex-wrap: wrap; */
+  gap: 10px;
 }
 
 .bottom-container {
@@ -42,8 +42,8 @@ img {
   align-items: center;
   font-family: "Hylian";
   padding: 3% 3%;
-  flex-wrap: wrap; /* Allow items to wrap onto multiple lines */
-  gap: 10px; /* Increase the spacing between items */
+  /* flex-wrap: wrap; */
+  gap: 10px;
 }
 
 body {

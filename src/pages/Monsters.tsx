@@ -55,23 +55,37 @@ function Monsters() {
 
   return (
     <>
-      <Navbar />
-      <Container>
-        <TextField
-          label="Search"
-          variant="outlined"
-          value={searchTerm}
-          onChange={(e) => setSearchTerm(e.target.value)}
-        />
-        <Grid container spacing={3}>
-          {filteredMonsters &&
-            filteredMonsters.map((monster) => (
-              <Grid item key={monster.id} xs={12} sm={6} md={4} lg={3}>
-                <MyCard item={monster} />
-              </Grid>
-            ))}
-        </Grid>
-      </Container>
+      <div
+        style={{ display: "flex", flexDirection: "column", minHeight: "100vh" }}
+      >
+        <Navbar />
+        <Container>
+          <div style={{ display: "flex", justifyContent: "center" }}>
+            <TextField
+              label="Search"
+              variant="outlined"
+              value={searchTerm}
+              onChange={(e) => setSearchTerm(e.target.value)}
+              style={{
+                width: "30%",
+                height: "52px",
+                marginTop: "10px", // Make the search bar take up the full width of its container
+                marginBottom: "20px",
+                backgroundColor: "white",
+                borderRadius: "15px",
+              }}
+            />
+          </div>
+          <Grid container spacing={3}>
+            {filteredMonsters &&
+              filteredMonsters.map((monster) => (
+                <Grid item key={monster.id} xs={12} sm={6} md={4} lg={3}>
+                  <MyCard item={monster} />
+                </Grid>
+              ))}
+          </Grid>
+        </Container>
+      </div>
     </>
   );
 }

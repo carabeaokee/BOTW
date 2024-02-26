@@ -5,7 +5,6 @@
   align-items: center;
   justify-content: center;
   color: white;
-  background-color: rgb(30, 29, 29);
 }
 
 .auth-form-container,
@@ -98,17 +97,28 @@ button {
 }
 
 .account-link {
-  font-family: Orbitron;
+  font-family: Hylian;
 }
 
 .home-link {
-  font-family: Orbitron;
-}
-
-.category-link {
-  font-family: Macondo;
+  font-family: Hylian;
 }
 
 h1 {
   font-family: Hylian;
 }
+/* 
+.item-link {
+  color: white;
+}
+
+.item-link:hover {
+  color: yellow; /* Change the color to yellow when a mouse hovers over the link */
+
+/* .link-icon:hover {
+  filter: brightness(
+    1.2
+  ); /* Increase the brightness of the icon when a mouse hovers over it */
+
+/* .category-link.active {
+  color: red; /* Change the color of active links to red */

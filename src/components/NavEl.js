@@ -13,21 +13,31 @@ export const Nav = styled.nav`
   /* justify-content: flex-start; */
 `;
 
+export const Icon = styled.img`
+  &:hover {
+    opacity: 0.7;
+  }
+`;
+
 export const NavLink = styled(Link)`
   color: #fff;
   display: flex;
   margin: 0 1rem;
   align-items: center;
-  font-size: 1.5rem;
+  font-size: 2rem;
   text-decoration: none;
   padding: 0 1rem;
   height: 100%;
   cursor: pointer;
+  
 
-  &.active {
-    color: #15cdfc;
+
   }
 `;
+
+// svg {
+//   fill: #15cdfc;
+// }
 
 // export const Bars = styled(FaBars)`
 //   display: none;

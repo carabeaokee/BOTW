@@ -10,6 +10,7 @@ const Login = () => {
   const navigate = useNavigate();
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
+  // const [error, setError] = useState("");
 
   const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
@@ -33,47 +34,90 @@ const Login = () => {
 
   return (
     <>
-      <Navbar />
-      <div>
-        <h1>Sign In</h1>
-        <br />
-        <form onSubmit={handleSubmit}>
-          <div className="mb-3">
-            <label htmlFor="email" className="form-label">
-              Email address
-            </label>
-            <input
-              type="email"
-              className="form-control"
-              id="email"
-              placeholder="Enter email"
-              value={email}
-              onChange={handleEmailChange}
-            />
-          </div>
+      <div
+        style={{ display: "flex", flexDirection: "column", minHeight: "100vh" }}
+      >
+        <Navbar />
+        <div
+          style={{
+            width: "300px",
+            margin: "90px auto",
+            padding: "50px",
+            backgroundColor: "#333",
+            borderRadius: "25px",
+            color: "#fff",
+            fontFamily: "Arial, sans-serif",
+            fontSize: "20px",
+          }}
+        >
+          <h1 style={{ textAlign: "center" }}>Sign In</h1>
+          <br />
+          <form onSubmit={handleSubmit}>
+            <div className="mb-3">
+              <label htmlFor="email" className="form-label">
+                Email address
+              </label>
+              <input
+                type="email"
+                className="form-control"
+                id="email"
+                placeholder="Enter Email"
+                value={email}
+                onChange={handleEmailChange}
+                style={{
+                  marginBottom: "10px",
+                  backgroundColor: "#555",
+                  color: "#fff",
+                  borderColor: "#777",
+                  width: "90%",
+                  fontSize: "20px",
+                }}
+              />
+            </div>
+            <br />
+            <div className="mb-3">
+              <label htmlFor="password" className="form-label">
+                Password
+              </label>
+              <br />
+              <input
+                type="password"
+                className="form-control"
+                id="password"
+                placeholder="***********"
+                value={password}
+                onChange={handlePasswordChange}
+                style={{
+                  marginBottom: "10px",
+                  backgroundColor: "#555",
+                  color: "#fff",
+                  borderColor: "#777",
+                  width: "90%",
+                }}
+              />
+            </div>
 
-          <div className="mb-3">
-            <label htmlFor="password" className="form-label">
-              Password
-            </label>
-            <input
-              type="password"
-              className="form-control"
-              id="password"
-              placeholder="Password"
-              value={password}
-              onChange={handlePasswordChange}
-            />
-          </div>
+            <button
+              type="submit"
+              className="btn btn-primary"
+              style={{
+                width: "100%",
+                backgroundColor: "#007bff",
+                borderColor: "#007bff",
+                color: "white",
+                marginTop: "25px",
+              }}
+            >
+              Sign In
+            </button>
+          </form>
 
-          <button type="submit" className="btn btn-primary">
-            Sign In
-          </button>
-        </form>
-        <br />
-        <p>
-          <Link to="/register">Don't have an account? Register</Link>
-        </p>
+          <p style={{ textAlign: "center" }}>
+            <Link to="/register" style={{ color: "#007bff" }}>
+              Don't have an account? Sign Up
+            </Link>
+          </p>
+        </div>
       </div>
     </>
   );
