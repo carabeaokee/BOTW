@@ -28,13 +28,18 @@ const Register = () => {
     const validPassword = validatePassword(password, repeatPassword);
     if (validPassword) {
       try {
-        const userCredential = await signupUser(email, password, firstName);
-        console.log("userCredential", userCredential);
-        //modify user's profile
-        if (userCredential !== void 0 && userCredential.user !== null) {
-          await updateProfile(userCredential.user, { displayName: firstName });
-          console.log("User profile updated");
-        }
+        signupUser(email, password, firstName);
+
+        // const userCredential = await signupUser(email, password, firstName);
+        // console.log("userCredential", userCredential);
+        // //modify user's profile
+        // if (userCredential) {
+        //   const updatedProfile = await updateProfile(userCredential, {
+        //     displayName: firstName,
+        //   }).then(() => {
+        //     console.log("User profile updated", updatedProfile);
+        //   });
+        // }
       } catch (error) {
         setError("Oops! Something went wrong. Please try again.");
       }

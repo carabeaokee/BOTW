@@ -9,7 +9,7 @@ import {
   updateProfile,
 } from "firebase/auth";
 import { auth, db } from "../firebaseConfig.ts";
-import { collection, doc, setDoc } from "firebase/firestore";
+import { doc, setDoc } from "firebase/firestore";
 
 // const defaultValue = null;
 
@@ -42,7 +42,7 @@ export const AuthContext = createContext(defaultValue);
 export const AuthProvider = ({ children }) => {
   const [user, setUser] = useState<User | null>(null);
   // const [firstName, setFirstName] = useState<string>("");
-  const [userChecked, setUserChecked] = useState<boolean>(false);
+  // const [userChecked, setUserChecked] = useState<boolean>(false);
 
   // const updateName = (newName: string) => {
   //   setName(newName);
@@ -82,6 +82,12 @@ export const AuthProvider = ({ children }) => {
         favourites: [],
       });
       console.log("docRef", docRef);
+      await updateProfile(userCredential.user, {
+        displayName: firstName,
+      }).then((profile) => {
+        console.log("User profile updated", profile);
+      });
+      // return docRef;
       // console.log("Document written with ID: ", docRef);
       // const collectionpath = doc(db, uid, "favourites");
       // const updatedUser = await setDoc(collectionpath, { items: [] });
@@ -89,29 +95,6 @@ export const AuthProvider = ({ children }) => {
     }
   };
   // return userCredential.user;
-
-  // const signupUser = (email: string, password: string) => {
-  //   // console.log("Signup called with:", email, password);
-  //   // console.log("auth :>> ", auth);
-
-  //   createUserWithEmailAndPassword(auth, email, password).then(
-  //     (userCredential) => {
-  //       // const user = userCredential.user;
-  //       return updateProfile(userCredential.user, {
-  //         displayName: firstName,
-  //       })
-  //         .then(() => {
-  //           setUser(user);
-  //           return user
-  //         })
-  //         .catch((error) => {
-  //           console.error("Error signing up: ", error.code, error.message);
-  //         });
-  //     }
-  //   );
-  // };
-
-  // console.log("user :>>", user);
 
   const getActiveUser = () => {
     onAuthStateChanged(auth, (user) => {
@@ -126,7 +109,7 @@ export const AuthProvider = ({ children }) => {
 
   useEffect(() => {
     getActiveUser();
-    setUserChecked(true);
+    // setUserChecked(true);
   }, []);
 
   console.log("user :>>", user);

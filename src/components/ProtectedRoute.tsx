@@ -1,5 +1,5 @@
 import React from "react";
-import { useEffect, useContext } from "react";
+import { useContext } from "react";
 import { Navigate, useNavigate } from "react-router-dom";
 import { AuthContext } from "./AuthContext";
 import { ProtectedRouteProps } from "../types/Customtypes";
