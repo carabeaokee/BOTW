@@ -10,7 +10,7 @@ import Register from "./registration/register";
 import Login from "./registration/login";
 import ErrorComponent from "./pages/ErrorComponent";
 import Account from "./pages/accountpage";
-import { AuthContext, AuthProvider } from "./components/AuthContext";
+import { AuthProvider } from "./components/AuthContext";
 import "./App.css";
 import DetailsPage from "./pages/detailspage";
 import ProtectedRoute from "./components/ProtectedRoute";

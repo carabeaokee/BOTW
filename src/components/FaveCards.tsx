@@ -3,21 +3,19 @@ import AspectRatio from "@mui/joy/AspectRatio";
 import CardOverflow from "@mui/joy/CardOverflow";
 import { useState, useEffect, useContext } from "react";
 import { AuthContext } from "./AuthContext";
-import { Favorite, FavoriteBorder } from "@mui/icons-material";
+import DeleteForeverIcon from "@mui/icons-material/DeleteForever";
+import { NavLink } from "react-router-dom";
 import {
   arrayRemove,
   arrayUnion,
-  deleteDoc,
   doc,
   getDoc,
-  setDoc,
   updateDoc,
 } from "firebase/firestore";
 import { db } from "../firebaseConfig";
 import {
   IconButton,
   Card,
-  CardCover,
   CardContent,
   Typography,
   CardActions,
@@ -25,6 +23,7 @@ import {
 } from "@mui/joy";
 import { CardMedia } from "@mui/material";
 
+// Define the Fave interface
 interface Fave {
   id: string;
   image: string;
@@ -32,29 +31,38 @@ interface Fave {
   category: string;
 }
 
-// function capitalizeWords(str: string) {
-//   return str.replace(/\b\w+\b/g, (word) => {
-//     const romanNumeralRegex =
-//       /^(M{0,3})(CM|CD|D?C{0,3})(XC|XL|L?X{0,3})(IX|IV|V?I{0,3})$/;
+// Function to capitalize words in a string
+function capitalizeWords(str: string) {
+  return str.replace(/\b\w+\b/g, (word) => {
+    // Define a regex for Roman numerals
+    const romanNumeralRegex =
+      /^(M{0,3})(CM|CD|D?C{0,3})(XC|XL|L?X{0,3})(IX|IV|V?I{0,3})$/;
 
-//     if (romanNumeralRegex.test(word.toUpperCase())) {
-//       return word.toUpperCase();
-//     } else {
-//       return word.replace(/\b\w/g, (char, index) => {
-//         if (index > 0 && word[index - 1] === "'") {
-//           return char.toLowerCase();
-//         } else {
-//           return char.toUpperCase();
-//         }
-//       });
-//     }
-//   });
-// }
+    // If the word is a Roman numeral, return it in uppercase
+    if (romanNumeralRegex.test(word.toUpperCase())) {
+      return word.toUpperCase();
+    } else {
+      // Otherwise, capitalize the first letter of each word
+      return word.replace(/\b\w/g, (char, index) => {
+        if (index > 0 && word[index - 1] === "'") {
+          return char.toLowerCase();
+        } else {
+          return char.toUpperCase();
+        }
+      });
+    }
+  });
+}
 
+// Define the FaveCards component
 export default function FaveCards({ fave }: { fave: Fave }) {
+  // Get the current user from the AuthContext
   const { user } = useContext(AuthContext);
+  // Initialize state variables for favourites and hover
   const [favourites, setFavourites] = useState([]);
+  const [hover, setHover] = useState(false);
 
+  // Fetch the user's favourites when the user changes
   useEffect(() => {
     if (user) {
       const fetchFavourites = async () => {
@@ -71,31 +79,54 @@ export default function FaveCards({ fave }: { fave: Fave }) {
     }
   }, [user]);
 
+  // Check if the current fave is in the user's favourites
   const isFavourite = favourites.includes(fave.id);
 
+  // Handle the user clicking on a fave
   const handleFavourite = async () => {
     console.log("Favourite clicked", fave);
     if (user) {
       const uid = user.uid;
       const path = doc(db, "users", uid);
       if (isFavourite) {
+        // If the fave is already in the user's favourites, remove it
         await updateDoc(path, { favourites: arrayRemove(fave.id) });
         console.log("Item removed from favourites");
-        setFavourites(favourites.filter((fav) => fav !== fave.id)); // remove item from favourites
+        setFavourites(favourites.filter((fav) => fav !== fave.id));
       } else {
+        // If the fave is not in the user's favourites, add it
         await updateDoc(path, { favourites: arrayUnion(fave.id) });
         console.log("Item added to favourites");
-        setFavourites([...favourites, fave.id]); // add item to favourites
+        setFavourites([...favourites, fave.id]);
       }
     }
   };
 
+  // Get the color for a category section of card
+  function getCategoryColor(category: string) {
+    switch (category) {
+      case "monsters":
+        return "lightgrey";
+      case "creatures":
+        return "lightblue";
+      case "treasure":
+        return "lightgreen";
+      case "equipment":
+        return "pink";
+      case "materials":
+        return "orange";
+      default:
+        return "defaultColor";
+    }
+  }
+
+  // Return the FaveCards component
   return (
     <>
-      <Grid container spacing={2}>
+      <Grid container spacing={2} sx={{ margin: "0.5rem" }}>
         <Card orientation="horizontal" variant="outlined" sx={{ width: 260 }}>
           <CardOverflow>
-            <AspectRatio ratio="1" sx={{ width: 90 }}>
+            <AspectRatio ratio="1" sx={{ width: 115 }}>
               <img src={fave.image} alt={fave.name} />
             </AspectRatio>
           </CardOverflow>
@@ -103,24 +134,42 @@ export default function FaveCards({ fave }: { fave: Fave }) {
             buttonFlex="0 1 120px"
             sx={{
               position: "absolute",
-              top: -5,
-              right: 12,
+              top: 60,
+              right: 30,
             }}
           >
             <IconButton
               color="neutral"
-              sx={{ mr: "auto", color: isFavourite ? "red" : "white" }}
+              sx={{
+                mr: "auto",
+                color: isFavourite ? "black" : "red",
+                ":hover": {
+                  color: "red",
+                },
+              }}
               onClick={handleFavourite}
             >
-              {isFavourite ? <Favorite /> : <FavoriteBorder />}
+              {isFavourite ? <DeleteForeverIcon /> : <DeleteForeverIcon />}
             </IconButton>
           </CardActions>
           <CardContent>
             <CardMedia image={fave.image} title={fave.name} />
             <Typography fontWeight="md" textColor="success.plainColor">
-              {fave.name}
+              {" "}
+              <NavLink
+                className="item-link"
+                to={`/${fave.id}`}
+                onMouseEnter={() => setHover(true)}
+                onMouseLeave={() => setHover(false)}
+                style={{
+                  color: hover ? "blue" : "black",
+                  fontFamily: "Orbitron",
+                  fontSize: "18px",
+                }}
+              >
+                {capitalizeWords(fave.name)}
+              </NavLink>
             </Typography>
-            <Typography level="body-sm">{fave.category}</Typography>
           </CardContent>
           <CardOverflow
             variant="soft"
@@ -135,6 +184,7 @@ export default function FaveCards({ fave }: { fave: Fave }) {
               textTransform: "uppercase",
               borderLeft: "1px solid",
               borderColor: "divider",
+              backgroundColor: getCategoryColor(fave.category),
             }}
           >
             {fave.category}

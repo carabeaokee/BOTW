@@ -2,42 +2,51 @@ import React from "react";
 import { AuthContext } from "../components/AuthContext";
 import { useNavigate, Link } from "react-router-dom";
 import { useContext, useState, useEffect } from "react";
-import "../components/css/login.css";
 import Navbar from "../components/Navbar";
 
+// Define the Login component
 const Login = () => {
+  // Get the user and loginUser function from the AuthContext
   const { user, loginUser } = useContext(AuthContext);
   const navigate = useNavigate();
+  // Initialize the email and password state variables with empty strings
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
-  // const [error, setError] = useState("");
+  const [error, setError] = useState(null);
 
+  // Function to handle form submission
   const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
     console.log("Attempting to sign in with: ", email, password);
+
     loginUser(email, password);
   };
 
+  // Redirect to account page if user is logged in
   useEffect(() => {
     if (user) {
       navigate("/account");
     }
   }, [user, navigate]);
 
+  // Function to handle email input change
   const handleEmailChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     setEmail(e.target.value);
   };
 
+  // Function to handle password input change
   const handlePasswordChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     setPassword(e.target.value);
   };
 
+  // Return the JSX for the Login component
   return (
     <>
       <div
         style={{ display: "flex", flexDirection: "column", minHeight: "100vh" }}
       >
         <Navbar />
+        {error && <p>{error}</p>}
         <div
           style={{
             width: "300px",

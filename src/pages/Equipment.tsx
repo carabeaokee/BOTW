@@ -6,27 +6,34 @@ import MyCard from "../components/MyCard";
 import Navbar from "../components/Navbar";
 import Infinity from "../assets/icons/infinity.svg";
 
+// Function to display Equipment page
 function Equipment() {
+  // Initialize state variables for equipment and search term
   const [equipment, setEquipment] = useState<EquipmentItem[] | null>(null);
   const [searchTerm, setSearchTerm] = useState("");
 
+  // URL for fetching equipment data
   const equipmentUrl =
     "https://botw-compendium.herokuapp.com/api/v3/compendium/category/equipment";
 
+  // Function to fetch equipment data from API
   const getEquipment = async () => {
     try {
       const response = await fetch(equipmentUrl);
       const result = await response.json();
+      // Update equipment state with fetched data
       setEquipment(result.data);
     } catch (error) {
       console.log("error :>> ", error);
     }
   };
 
+  // Use effect hook to fetch equipment data when component mounts
   useEffect(() => {
     getEquipment();
   }, []);
 
+  // Show loading icon if equipment data is not yet loaded
   if (!equipment) {
     return (
       <div>
@@ -34,8 +41,8 @@ function Equipment() {
           src={Infinity}
           alt="Loading-Icon"
           style={{
-            width: "500px", // Set the width
-            height: "500px", // Set the height
+            width: "500px",
+            height: "500px",
             display: "block",
             margin: "auto",
             position: "absolute",
@@ -49,10 +56,12 @@ function Equipment() {
     );
   }
 
+  // Filter equipment based on search term
   const filteredEquipment = equipment?.filter((equipment) =>
     equipment.name.toLowerCase().includes(searchTerm.toLowerCase())
   );
 
+  // Return JSX to display Equipment page
   return (
     <>
       <div
@@ -69,7 +78,7 @@ function Equipment() {
               style={{
                 width: "30%",
                 height: "52px",
-                marginTop: "10px", // Make the search bar take up the full width of its container
+                marginTop: "10px",
                 marginBottom: "20px",
                 backgroundColor: "white",
                 borderRadius: "15px",

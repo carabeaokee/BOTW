@@ -1,5 +1,4 @@
 import React, { useState, useEffect } from "react";
-// import { Box, Card, CardCover, CardContent, Typography } from "@mui/joy";
 import { useParams, useNavigate } from "react-router-dom";
 import {
   CreatureType,
@@ -20,9 +19,11 @@ import Chickenleg from "../assets/icons/chickenleg.svg";
 import Location from "../assets/icons/location.svg";
 import Plusheart from "../assets/icons/plusheart.svg";
 import Shield from "../assets/icons/shield.svg";
-import Suitheart from "../assets/icons/suitheart.svg";
 import Drops from "../assets/icons/drops.svg";
+import ArrowCircleLeftIcon from "@mui/icons-material/ArrowCircleLeft";
+import ArrowCircleRightIcon from "@mui/icons-material/ArrowCircleRight";
 
+// Define the type of entry
 type EntryType =
   | CreatureType
   | MaterialType
@@ -30,43 +31,57 @@ type EntryType =
   | TreasureType
   | EquipmentItem;
 
+// Define the DetailsPage component
 const DetailsPage = <T extends EntryType>() => {
+  // Initialize state variable for entry
   const [entry, setEntry] = useState<T | null>(null);
+  // Get the id parameter from the URL
   const params = useParams<{ id: string }>();
+  // Initialize navigate function from useNavigate hook
   const navigate = useNavigate();
+  // Define the style for the icon
   const iconStyle = {
     width: "25px",
     height: "25px",
     marginRight: "8px",
     marginBottom: "-3px",
+    cursor: "pointer",
   };
 
+  // Fetch the entry data from the API
   useEffect(() => {
     const getEntry = async () => {
       try {
         const result = await fetch(
           `https://botw-compendium.herokuapp.com/api/v3/compendium/entry/${params.id}`
         );
+        // Throw an error if the network response is not ok
         if (!result.ok) {
           throw new Error("Network response was not ok");
         }
+        // Parse the JSON response
         const data: T = await result.json();
         console.log("data post fetch", data);
+        // Update the entry state with the fetched data
         setEntry(data.data);
+        // Catch and log any errors
       } catch (error) {
         console.error(error);
         navigate("/error");
       }
     };
 
+    // Call the getEntry function
     getEntry();
-  }, [params.id, navigate]);
+  }, [params.id, navigate]); // Add params.id and navigate to the dependency array
 
+  // Define the handleNext function
   const handleNext = () => {
     const nextId = Number(params.id) + 1;
     navigate(`/${nextId}`);
   };
 
+  // Define the handlePrev function
   const handlePrev = () => {
     const prevId = Number(params.id) - 1;
     if (prevId > 0) {
@@ -74,6 +89,7 @@ const DetailsPage = <T extends EntryType>() => {
     }
   };
 
+  // Show loading icon if entry data is not yet loaded
   if (!entry) {
     return (
       <div>
@@ -81,8 +97,8 @@ const DetailsPage = <T extends EntryType>() => {
           src={Infinity}
           alt="Loading-Icon"
           style={{
-            width: "500px", // Set the width
-            height: "500px", // Set the height
+            width: "500px",
+            height: "500px",
             display: "block",
             margin: "auto",
             position: "absolute",
@@ -96,7 +112,9 @@ const DetailsPage = <T extends EntryType>() => {
     );
   }
 
+  // Define the capitalizeWords function
   function capitalizeWords(str: string) {
+    // Use the replace method to capitalize each word in the string
     return str.replace(/\b\w+\b/g, (word) => {
       // Regular expression to match Roman numerals
       const romanNumeralRegex =
@@ -118,8 +136,7 @@ const DetailsPage = <T extends EntryType>() => {
     });
   }
 
-  // console.log(entry);
-
+  // Render the component
   return (
     <>
       <Navbar />
@@ -131,31 +148,33 @@ const DetailsPage = <T extends EntryType>() => {
             padding: "10px 0",
           }}
         >
-          <button
+          <ArrowCircleLeftIcon
             style={{
               padding: "10px 0",
               width: "100px",
               height: "50px",
-              color: "black",
-              backgroundColor: "lightgrey",
+              color: "grey",
+              backgroundColor: "black",
               marginLeft: "20px",
+              cursor: "pointer",
             }}
             onClick={handlePrev}
           >
             Previous
-          </button>
-          <button
+          </ArrowCircleLeftIcon>
+          <ArrowCircleRightIcon
             style={{
               padding: "10px 0",
               width: "100px",
               height: "50px",
-              color: "black",
-              backgroundColor: "lightgrey",
+              color: "grey",
+              backgroundColor: "black",
+              cursor: "pointer",
             }}
             onClick={handleNext}
           >
             Next
-          </button>
+          </ArrowCircleRightIcon>
         </div>
         <div style={{ display: "flex", justifyContent: "center" }}>
           <div>

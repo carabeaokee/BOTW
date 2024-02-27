@@ -8,11 +8,13 @@ import Mushroomsicon from "../assets/icons/mushroomsicon.svg";
 import Monstericon from "../assets/icons/monstericon.svg";
 import Swordicon from "../assets/icons/swordicon.svg";
 import Rupeeicon from "../assets/icons/rupeeicon.svg";
-import "./css/NavStyle.css";
 import { useLocation } from "react-router-dom";
 
+// Define the Navbar component
 const Navbar = () => {
+  // Get the current location from the useLocation hook
   const location = useLocation();
+  // Get the user, logoutUser function, and loginUser function from the AuthContext
   const { user, logoutUser, loginUser } = useContext(AuthContext) ?? {};
 
   const handleClick = () => {
@@ -23,9 +25,12 @@ const Navbar = () => {
     }
   };
 
+  // Define the path for the navbar button. If the user is logged in, it should go to the home page. If the user is not logged in, it should go to the login page.
   const navPath = user ? "/" : "/login";
+  // Define the label for the navbar button. If the user is logged in, it should say "Log Out". If the user is not logged in, it should say "Log In".
   const navLabel = user ? "Log Out" : "Log In";
 
+  // Return the JSX for the Navbar component
   return (
     <Nav>
       <TriforceIcon />
@@ -35,12 +40,13 @@ const Navbar = () => {
         </NavLink>
         <NavLink className="category-link" to="/creatures">
           <img
+            className="nav-icon"
             src={Spidericon}
             style={{
               height: "52px",
               width: "52px",
-              borderBottom:
-                location.pathname === "/creatures" ? "2px solid #000" : "none",
+              filter:
+                location.pathname === "/creatures" ? "brightness(0.7)" : "none",
             }}
             alt="Creatures-Icon"
           />
@@ -48,28 +54,48 @@ const Navbar = () => {
         <NavLink className="category-link" to="/monsters">
           <img
             src={Monstericon}
-            style={{ height: "52px", width: "52px" }}
+            style={{
+              height: "52px",
+              width: "52px",
+              filter:
+                location.pathname === "/monsters" ? "brightness(0.7)" : "none",
+            }}
             alt="Monsters-Icon"
           />
         </NavLink>
         <NavLink className="category-link" to="/equipment">
           <img
             src={Swordicon}
-            style={{ height: "52px", width: "52px" }}
+            style={{
+              height: "52px",
+              width: "52px",
+              filter:
+                location.pathname === "/equipment" ? "brightness(0.7)" : "none",
+            }}
             alt="Equipment-Icon"
           />
         </NavLink>
         <NavLink className="category-link" to="/materials">
           <img
             src={Mushroomsicon}
-            style={{ height: "52px", width: "52px" }}
+            style={{
+              height: "52px",
+              width: "52px",
+              filter:
+                location.pathname === "/materials" ? "brightness(0.7)" : "none",
+            }}
             alt="Materials-Icon"
           />
         </NavLink>
         <NavLink className="category-link" to="/treasure">
           <img
             src={Rupeeicon}
-            style={{ height: "52px", width: "52px" }}
+            style={{
+              height: "52px",
+              width: "52px",
+              filter:
+                location.pathname === "/treasure" ? "brightness(0.7)" : "none",
+            }}
             alt="Treasure-Icon"
           />
         </NavLink>

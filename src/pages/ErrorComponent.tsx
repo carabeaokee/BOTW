@@ -7,8 +7,11 @@ import KeyboardArrowRight from "@mui/icons-material/KeyboardArrowRight";
 import KeyboardArrowLeft from "@mui/icons-material/KeyboardArrowLeft";
 import Box from "@mui/joy/Box";
 
+// Function to display Error page
 function ErrorComponent() {
   const navigate = useNavigate();
+
+  // Return JSX
   return (
     <>
       <Navbar />
@@ -18,7 +21,7 @@ function ErrorComponent() {
           flexDirection: "column",
           alignItems: "center",
           justifyContent: "center",
-          height: "85vh", // This makes the div take up the full height of the viewport
+          height: "85vh",
         }}
       >
         <h1>Error!</h1>

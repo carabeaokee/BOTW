@@ -3,43 +3,32 @@ import Navbar from "../components/Navbar";
 import { useState, useContext, useEffect } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import { AuthContext } from "../components/AuthContext";
-import { db } from "../firebaseConfig";
-import { collection, addDoc, doc, getDoc, setDoc } from "firebase/firestore";
-import { getAuth, updateProfile } from "firebase/auth";
 
+// Define the Register component
 const Register = () => {
+  // Get the user and signupUser function from the AuthContext
   const { user, signupUser } = useContext(AuthContext);
   const navigate = useNavigate();
 
+  // Initialize the firstName, email, password, repeatPassword, and error state variables with empty strings
   const [firstName, setFirstName] = useState("");
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [repeatPassword, setRepeatPassword] = useState("");
   const [error, setError] = useState("");
 
+  // Function to validate the password and repeatPassword
   const validatePassword = (password: string, repeatPassword: string) => {
     return password === repeatPassword;
   };
 
-  // const handleRegister = async () => {};
-
+  // Function to handle form submission
   const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
     const validPassword = validatePassword(password, repeatPassword);
     if (validPassword) {
       try {
         signupUser(email, password, firstName);
-
-        // const userCredential = await signupUser(email, password, firstName);
-        // console.log("userCredential", userCredential);
-        // //modify user's profile
-        // if (userCredential) {
-        //   const updatedProfile = await updateProfile(userCredential, {
-        //     displayName: firstName,
-        //   }).then(() => {
-        //     console.log("User profile updated", updatedProfile);
-        //   });
-        // }
       } catch (error) {
         setError("Oops! Something went wrong. Please try again.");
       }
@@ -48,30 +37,36 @@ const Register = () => {
     }
   };
 
+  // Redirect to account page if user is logged in
   useEffect(() => {
     if (user) {
       navigate("/account");
     }
   }, [user, navigate]);
 
+  // Function to handle firstName input change
   const handleNameChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     setFirstName(e.target.value);
   };
 
+  // Function to handle email input change
   const handleEmailChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     setEmail(e.target.value);
   };
 
+  // Function to handle password input change
   const handlePasswordChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     setPassword(e.target.value);
   };
 
+  // Function to handle repeatPassword input change
   const handleRepeatPasswordChange = (
     e: React.ChangeEvent<HTMLInputElement>
   ) => {
     setRepeatPassword(e.target.value);
   };
 
+  // Return the JSX for the Register component
   return (
     <>
       <div
@@ -206,61 +201,3 @@ const Register = () => {
 };
 
 export default Register;
-
-// import React, { useState } from "react";
-// import Navbar from "../components/Navbar";
-
-// export const Register = (props) => {
-//   const [email, setEmail] = useState("");
-//   const [pass, setPass] = useState("");
-//   const [name, setName] = useState("");
-
-//   const handleSubmit = (e) => {
-//     e.preventDefault();
-//     console.log(email);
-//   };
-
-//   return (
-//     <>
-//       <Navbar />
-//       <div className="auth-form-container">
-//         <h2>Register</h2>
-//         <form className="register-form" onSubmit={handleSubmit}>
-//           <label htmlFor="name">Full name</label>
-//           <input
-//             value={name}
-//             name="name"
-//             onChange={(e) => setName(e.target.value)}
-//             id="name"
-//             placeholder="full Name"
-//           />
-//           <label htmlFor="email">email</label>
-//           <input
-//             value={email}
-//             onChange={(e) => setEmail(e.target.value)}
-//             type="email"
-//             placeholder="youremail@gmail.com"
-//             id="email"
-//             name="email"
-//           />
-//           <label htmlFor="password">password</label>
-//           <input
-//             value={pass}
-//             onChange={(e) => setPass(e.target.value)}
-//             type="password"
-//             placeholder="********"
-//             id="password"
-//             name="password"
-//           />
-//           <button type="submit">Log In</button>
-//         </form>
-//         <button
-//           className="link-btn"
-//           onClick={() => props.onFormSwitch("login")}
-//         >
-//           Already have an account? Login here.
-//         </button>
-//       </div>
-//     </>
-//   );
-// };

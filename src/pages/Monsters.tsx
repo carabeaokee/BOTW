@@ -7,26 +7,30 @@ import Navbar from "../components/Navbar";
 import Infinity from "../assets/icons/infinity.svg";
 
 function Monsters() {
+  // Initialize state variables for monsters and search term
   const [monsters, setMonsters] = useState<MonsterType[] | null>(null);
   const [searchTerm, setSearchTerm] = useState("");
+  // URL for fetching monsters data
   const monstersUrl =
     "https://botw-compendium.herokuapp.com/api/v3/compendium/category/monsters";
 
+  // Function to fetch monsters data from API
   const getMonsters = async () => {
     try {
       const response = await fetch(monstersUrl);
       const result = await response.json();
-      // console.log("result :>> ", result);
       setMonsters(result.data);
     } catch (error) {
       console.log("error :>> ", error);
     }
   };
 
+  // Use effect hook to fetch monsters data when component mounts
   useEffect(() => {
     getMonsters();
   }, []);
 
+  // Show loading icon if monsters data is not yet loaded
   if (!monsters) {
     return (
       <div>
@@ -34,8 +38,8 @@ function Monsters() {
           src={Infinity}
           alt="Loading-Icon"
           style={{
-            width: "500px", // Set the width
-            height: "500px", // Set the height
+            width: "500px",
+            height: "500px",
             display: "block",
             margin: "auto",
             position: "absolute",
@@ -49,10 +53,12 @@ function Monsters() {
     );
   }
 
+  // Filter monsters based on search term
   const filteredMonsters = monsters?.filter((monster) =>
     monster.name.toLowerCase().includes(searchTerm.toLowerCase())
   );
 
+  // Return JSX
   return (
     <>
       <div
@@ -60,6 +66,7 @@ function Monsters() {
       >
         <Navbar />
         <Container>
+          // Add a search bar to filter monsters
           <div style={{ display: "flex", justifyContent: "center" }}>
             <TextField
               label="Search"
@@ -69,13 +76,14 @@ function Monsters() {
               style={{
                 width: "30%",
                 height: "52px",
-                marginTop: "10px", // Make the search bar take up the full width of its container
+                marginTop: "10px",
                 marginBottom: "20px",
                 backgroundColor: "white",
                 borderRadius: "15px",
               }}
             />
           </div>
+          // Render the monsters data
           <Grid container spacing={3}>
             {filteredMonsters &&
               filteredMonsters.map((monster) => (

@@ -6,27 +6,33 @@ import MyCard from "../components/MyCard";
 import Navbar from "../components/Navbar";
 import Infinity from "../assets/icons/infinity.svg";
 
+// Function to display Treasure page
 function Treasure() {
+  // Initialize state variables for treasure and search term
   const [treasure, setTreasure] = useState<TreasureType[] | null>(null);
   const [searchTerm, setSearchTerm] = useState("");
+  // URL for fetching treasure data
   const treasureUrl =
     "https://botw-compendium.herokuapp.com/api/v3/compendium/category/treasure";
 
+  // Function to fetch treasure data from API
   const getTreasure = async () => {
     try {
       const response = await fetch(treasureUrl);
       const result = await response.json();
-      // console.log("result :>> ", result);
+      // Update treasure state with fetched data
       setTreasure(result.data);
     } catch (error) {
       console.log("error :>> ", error);
     }
   };
 
+  // Use effect hook to fetch treasure data when component mounts
   useEffect(() => {
     getTreasure();
   }, []);
 
+  // Show loading icon if treasure data is not yet loaded
   if (!treasure) {
     return (
       <div>
@@ -34,8 +40,8 @@ function Treasure() {
           src={Infinity}
           alt="Loading-Icon"
           style={{
-            width: "500px", // Set the width
-            height: "500px", // Set the height
+            width: "500px",
+            height: "500px",
             display: "block",
             margin: "auto",
             position: "absolute",
@@ -49,10 +55,12 @@ function Treasure() {
     );
   }
 
+  // Filter treasure based on search term
   const filteredTreasure = treasure?.filter((treasure) =>
     treasure.name.toLowerCase().includes(searchTerm.toLowerCase())
   );
 
+  // Return JSX
   return (
     <>
       <div
@@ -69,7 +77,7 @@ function Treasure() {
               style={{
                 width: "30%",
                 height: "52px",
-                marginTop: "10px", // Make the search bar take up the full width of its container
+                marginTop: "10px",
                 marginBottom: "20px",
                 backgroundColor: "white",
                 borderRadius: "15px",

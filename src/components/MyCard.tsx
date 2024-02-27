@@ -12,33 +12,36 @@ import {
 import { Favorite, FavoriteBorder } from "@mui/icons-material";
 import "../App.css";
 import { useState } from "react";
-// import Bookmarkheart from "../assets/icons/bookmarkheart.svg";
 import { AuthContext } from "./AuthContext";
 import {
   arrayRemove,
   arrayUnion,
-  deleteDoc,
   doc,
   getDoc,
-  setDoc,
   updateDoc,
 } from "firebase/firestore";
 import { db } from "../firebaseConfig";
 
+// Define the Item interface
 interface Item {
   id: string;
   image: string;
   name: string;
 }
 
+// Function to capitalize words in a string
 function capitalizeWords(str: string) {
+  // Replace each word in the string with a capitalized version
   return str.replace(/\b\w+\b/g, (word) => {
+    // Define a regex for Roman numerals
     const romanNumeralRegex =
       /^(M{0,3})(CM|CD|D?C{0,3})(XC|XL|L?X{0,3})(IX|IV|V?I{0,3})$/;
-
+    // If the word is a Roman numeral, return it in uppercase
     if (romanNumeralRegex.test(word.toUpperCase())) {
       return word.toUpperCase();
     } else {
+      // Otherwise, capitalize the first letter of each word
+      // If the character is preceded by an apostrophe, it should be in lowercase
       return word.replace(/\b\w/g, (char, index) => {
         if (index > 0 && word[index - 1] === "'") {
           return char.toLowerCase();
@@ -50,16 +53,13 @@ function capitalizeWords(str: string) {
   });
 }
 
-// if you want to add the actual items to a collection within the user,
-// you should use the item id to create a
-// new document within the favourites subcollection
-
+// Define the MyCard component
 export default function MyCard({ item }: { item: Item }) {
   const { user } = useContext(AuthContext);
   const [hover, setHover] = useState(false);
   const [favourites, setFavourites] = useState([]);
-  // const [isFavourite, setIsFavourite] = useState(false);
 
+  // Fetch favourites from database
   useEffect(() => {
     if (user) {
       const fetchFavourites = async () => {
@@ -76,10 +76,10 @@ export default function MyCard({ item }: { item: Item }) {
     }
   }, [user]);
 
-  // let favourites: string[] = [];
-
+  // Check if item is in favourites
   const isFavourite = favourites.includes(item.id);
 
+  // Add or remove item from favourites
   const handleFavourite = async () => {
     console.log("Favourite clicked", item);
     if (user) {
@@ -97,26 +97,7 @@ export default function MyCard({ item }: { item: Item }) {
     }
   };
 
-  // const handleUpdateFavourite = async (newData) => {
-  //   console.log("Update favourite clicked", item);
-  //   if (user) {
-  //     const uid = user.uid;
-  //     const path = doc(db, "users", uid, "favourites", item.id);
-  //     await updateDoc(path, newData);
-  //     console.log("Item updated in favourites");
-  //   }
-  // };
-
-  // const handleUnfavourite = async () => {
-  //   console.log("Unfavourite clicked", item);
-  //   if (user) {
-  //     const uid = user.uid;
-  //     const path = doc(db, "users", uid, "favourites", item.id);
-  //     await deleteDoc(path);
-  //     console.log("Item removed from favourites");
-  //   }
-  // };
-
+  // Render the card
   return (
     <>
       <Grid container spacing={2}>

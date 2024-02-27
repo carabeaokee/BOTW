@@ -11,20 +11,17 @@ import {
 import { auth, db } from "../firebaseConfig.ts";
 import { doc, setDoc } from "firebase/firestore";
 
-// const defaultValue = null;
-
+// Define the type for the authentication context
 interface AuthContextType {
   user: User | null;
-  // firstName: string;
   loginUser: (email: string, password: string) => void;
   signupUser: (email: string, password: string, firstName: string) => void;
   logoutUser: () => void;
-  // userChecked: boolean;
 }
 
+// Define the default value for the authentication context
 const defaultValue: AuthContextType = {
   user: null,
-  // firstName: "",
   loginUser: () => {
     throw Error("login function not implemented");
   },
@@ -34,36 +31,33 @@ const defaultValue: AuthContextType = {
   logoutUser: () => {
     throw Error("logout function not implemented");
   },
-  // userChecked: false,
 };
 
+// Create the authentication context
 export const AuthContext = createContext(defaultValue);
 
+// Define the authentication provider component
 export const AuthProvider = ({ children }) => {
+  // Initialize the user state
   const [user, setUser] = useState<User | null>(null);
-  // const [firstName, setFirstName] = useState<string>("");
-  // const [userChecked, setUserChecked] = useState<boolean>(false);
 
-  // const updateName = (newName: string) => {
-  //   setName(newName);
-  // };
-
+  // Define the login function
   const loginUser = (email: string, password: string) => {
-    // console.log("Login called with:", email, password);
     signInWithEmailAndPassword(auth, email, password)
       .then((userCredential) => {
         const user = userCredential.user;
-        setUser(user);
+        setUser(user); // Update the user state
       })
       .catch((error) => {
         const errorCode = error.code;
         const errorMessage = error.message;
-        setUser(null);
+        setUser(null); // Reset the user state
         console.log("errorCode :>> ", errorCode);
         console.log("errorMessage :>> ", errorMessage);
       });
   };
 
+  // Define the signup function
   const signupUser = async (
     email: string,
     password: string,
@@ -74,7 +68,7 @@ export const AuthProvider = ({ children }) => {
       email,
       password
     );
-    setUser(userCredential.user);
+    setUser(userCredential.user); // Update the user state
     if (userCredential.user) {
       const uid = userCredential.user.uid;
       const docRef = await setDoc(doc(db, "users", uid), {
@@ -87,33 +81,26 @@ export const AuthProvider = ({ children }) => {
       }).then((profile) => {
         console.log("User profile updated", profile);
       });
-      // return docRef;
-      // console.log("Document written with ID: ", docRef);
-      // const collectionpath = doc(db, uid, "favourites");
-      // const updatedUser = await setDoc(collectionpath, { items: [] });
-      // console.log("updatedUser", updatedUser);
     }
   };
-  // return userCredential.user;
 
+  // Define the function to get the active user
   const getActiveUser = () => {
     onAuthStateChanged(auth, (user) => {
       if (user) {
-        // console.log("active user", user);
-        setUser(user);
+        setUser(user); // Update the user state
       } else {
         console.log("no active user");
       }
     });
   };
 
+  // Use effect hook to get the active user when the component mounts
   useEffect(() => {
     getActiveUser();
-    // setUserChecked(true);
   }, []);
 
-  console.log("user :>>", user);
-
+  // Define the logout function
   const logoutUser = () => {
     signOut(auth)
       .then(() => {
@@ -124,6 +111,7 @@ export const AuthProvider = ({ children }) => {
       });
   };
 
+  // Return the authentication provider with the authentication context value
   return (
     <AuthContext.Provider
       value={{
